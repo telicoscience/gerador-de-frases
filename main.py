@@ -1,37 +1,38 @@
 from fasthtml.common import *
-
+import requests 
 app, rt = fast_app(hdrs=(picolink))
+from googletrans import Translator
 
+# Função para traduzir do inglês para o português
+def traduzir_para_portugues(texto_ingles):
+    # Inicializa o tradutor
+    tradutor = Translator()
+    
+    # Traduz do inglês para o português
+    traducao = tradutor.translate(texto_ingles, src='en', dest='pt')
+    
+    # Retorna o texto traduzido
+    return traducao.text
+
+
+url = "https://api.adviceslip.com/advice"
+response = requests.get(url)
+data = response.json()
 
 @rt("/")
 def get():
     return (
-        Socials(
-            title="Vercel + FastHTML",
-            site_name="Vercel",
-            description="A demo of Vercel and FastHTML integration",
-            image="https://vercel.fyi/fasthtml-og",
-            url="https://fasthtml-template.vercel.app",
-            twitter_site="@vercel",
-        ),
+      
         Container(
             Card(
                 Group(
                     P(
-                        "FastHTML is a new next-generation web framework for fast, scalable web applications with minimal, compact code. It builds on top of popular foundations like ASGI and HTMX. You can now deploy FastHTML with Vercel CLI or by pushing new changes to your git repository.",
+                        traduzir_para_portugues(data['slip']['advice'])
                     ),
                 ),
-                header=(Titled("FastHTML + Vercel")),
+                header=(Titled("Gerador de frases")),
                 footer=(
-                    P(
-                        A(
-                            "Deploy your own",
-                            href="https://vercel.com/templates/python/fasthtml-python-boilerplate",
-                        ),
-                        " or ",
-                        A("learn more", href="https://docs.fastht.ml/"),
-                        "about FastHTML.",
-                    )
+                    P(                    )
                 ),
             ),
         ),
